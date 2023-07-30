@@ -1293,6 +1293,7 @@ dependencies = [
 name = "sales-impl"
 version = "0.1.0"
 dependencies = [
+ "dotenv",
  "mysql",
  "sales-api",
 ]
