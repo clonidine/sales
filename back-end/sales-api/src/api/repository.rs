@@ -1,1 +1,1 @@
-pub trait Repository<T> {}
+pub trait Repository {}
