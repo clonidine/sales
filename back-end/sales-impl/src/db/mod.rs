@@ -44,3 +44,17 @@ impl Database for MySQL {
         }
     }
 }
+
+#[cfg(test)]
+mod db_tests {
+    use sales_api::api::provider::Database;
+
+    use super::MySQL;
+
+    #[test]
+    fn opening_conn() {
+        let conn = MySQL::connect();
+
+        assert!(conn.is_ok())
+    }
+}
