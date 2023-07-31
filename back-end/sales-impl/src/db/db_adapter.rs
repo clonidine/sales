@@ -1,8 +1,8 @@
 use super::mysql::MySQL;
 
-pub struct DBImplementation {}
+pub struct DBAdapter {}
 
-impl DBImplementation {
+impl DBAdapter {
     pub fn new() -> MySQL {
         MySQL {}
     }
