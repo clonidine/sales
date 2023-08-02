@@ -1671,6 +1671,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "rust_decimal_macros"
+version = "1.31.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c9c3bcd00383608992fd3e960f0a6e93a3b1e98218451aa1ca05a44505e5d52a"
+dependencies = [
+ "quote",
+ "rust_decimal",
+]
+
+[[package]]
 name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1701,6 +1711,8 @@ version = "0.1.0"
 dependencies = [
  "dotenv",
  "mysql",
+ "rust_decimal",
+ "rust_decimal_macros",
  "sqlx",
 ]
 
