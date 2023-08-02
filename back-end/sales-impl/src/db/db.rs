@@ -1,10 +1,10 @@
 use sales_api::api::provider::Database;
-use sqlx::Error;
+use sqlx::{AnyConnection, Error};
 
 pub struct DatabaseImpl;
 
 impl Database for DatabaseImpl {
-    fn connect() -> Result<sqlx::AnyConnection, Error> {
+    fn connect() -> Result<AnyConnection, Error> {
         todo!()
     }
 
