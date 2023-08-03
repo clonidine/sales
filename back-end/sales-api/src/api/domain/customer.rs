@@ -1,3 +1,5 @@
+use uuid::Uuid;
+
 use super::purchase::Purchase;
 
 pub struct Customer<'a> {
@@ -5,10 +7,11 @@ pub struct Customer<'a> {
     pub email: String,
     pub phone: Option<String>,
     pub purchases: Vec<Purchase<'a>>,
+    pub id: Uuid,
 }
 
 impl<'a> Customer<'a> {
-    pub fn new(name: String, email: String, phone: Option<String>) -> Customer<'a> {
+    pub fn new(name: String, email: String, phone: Option<String>, id: Uuid) -> Customer<'a> {
         let purchases = Vec::new();
 
         Customer {
@@ -16,6 +19,7 @@ impl<'a> Customer<'a> {
             email,
             phone,
             purchases,
+            id,
         }
     }
 }
