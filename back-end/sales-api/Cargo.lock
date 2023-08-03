@@ -1714,6 +1714,7 @@ dependencies = [
  "rust_decimal",
  "rust_decimal_macros",
  "sqlx",
+ "uuid",
 ]
 
 [[package]]
