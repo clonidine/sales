@@ -11,5 +11,5 @@ dotenv = "0.15.0"
 rust_decimal = "1.31.0"
 rust_decimal_macros = "1.31.0"
 serde = "1.0.181"
-sqlx = "0.7.1"
+sqlx = {version = "0.7.1", features = ["bigdecimal"]}
 uuid = {version = "1.4.1", features = ["v7", "serde"]}
