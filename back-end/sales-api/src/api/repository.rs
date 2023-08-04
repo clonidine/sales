@@ -1,7 +1,10 @@
-pub trait Repository {
-    fn save(&self) -> Result<(), String>;
-    fn delete(&self) -> Result<(), String>;
-    fn find_one(&self, id: usize) -> Option<&Self>;
-    fn create_table(&self) -> Result<(), String>;
-    fn get_table_name() -> &'static str;
+use async_trait::async_trait;
+
+#[async_trait]
+pub trait Repository<T> {
+    async fn save(obj: &T) -> Result<(), String>;
+    async fn delete(id: usize) -> Result<(), String>;
+    async fn find_one(id: usize) -> Result<T, String>;
+    async fn create_table() -> Result<(), String>;
+    async fn get_table_name() -> &'static str;
 }
