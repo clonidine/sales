@@ -1,16 +1,15 @@
-use rust_decimal::Decimal;
-use sqlx::FromRow;
+use sqlx::{types::BigDecimal, FromRow};
 use uuid::Uuid;
 
-#[derive(FromRow, serde::Deserialize, sqlx::Encode)]
+#[derive(FromRow, sqlx::Encode)]
 pub struct Product {
     pub name: String,
     pub id: Uuid,
-    pub price: Decimal,
+    pub price: BigDecimal,
 }
 
 impl Product {
-    pub fn new(name: String, id: Uuid, price: Decimal) -> Product {
+    pub fn new(name: String, id: Uuid, price: BigDecimal) -> Product {
         Product { name, id, price }
     }
 }
