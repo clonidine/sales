@@ -6,5 +6,4 @@ pub trait Repository<T> {
     async fn delete(id: usize) -> Result<(), String>;
     async fn find_one(id: usize) -> Result<T, String>;
     async fn create_table() -> Result<(), String>;
-    async fn get_table_name() -> &'static str;
 }
