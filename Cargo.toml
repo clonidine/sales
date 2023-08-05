@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "sales-api",
+    "sales-impl"
+]
