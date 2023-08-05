@@ -1,8 +1,8 @@
 use async_trait::async_trait;
-use sqlx::{AnyConnection, Result};
+use sqlx::{MySqlConnection, Result};
 
 #[async_trait]
 pub trait Database {
-    async fn connect(&self) -> Result<AnyConnection>;
+    async fn connect() -> Result<MySqlConnection>;
     async fn get_db_url(&self) -> Result<String>;
 }
