@@ -4,5 +4,5 @@ use sqlx::{MySqlConnection, Result};
 #[async_trait]
 pub trait Database {
     async fn connect() -> Result<MySqlConnection>;
-    async fn get_db_url(&self) -> Result<String>;
+    async fn get_db_url() -> Result<String>;
 }
