@@ -3,5 +3,5 @@
 members = [
     "sales-api",
     "sales-impl",
-    "sales-web"
+    "sales-web",
 ]
