@@ -1,7 +1,9 @@
-use sqlx::{types::BigDecimal, FromRow};
-use uuid::Uuid;
+use sqlx::{
+    types::{BigDecimal, Uuid},
+    FromRow,
+};
 
-#[derive(FromRow, sqlx::Encode)]
+#[derive(FromRow, sqlx::Encode, Debug, PartialEq)]
 pub struct Product {
     pub name: String,
     pub id: Uuid,

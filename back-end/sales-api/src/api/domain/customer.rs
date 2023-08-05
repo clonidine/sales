@@ -1,7 +1,8 @@
-use uuid::Uuid;
+use sqlx::types::Uuid;
 
 use super::purchase::Purchase;
 
+#[derive(Debug)]
 pub struct Customer<'a> {
     pub name: String,
     pub email: String,
