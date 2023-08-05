@@ -1,4 +1,5 @@
 pub mod db;
+pub mod repository;
 
 extern crate sales_api;
 
