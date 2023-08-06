@@ -2115,6 +2115,7 @@ dependencies = [
  "rocket_codegen",
  "rocket_http",
  "serde",
+ "serde_json",
  "state",
  "tempfile",
  "time",
@@ -2286,7 +2287,10 @@ dependencies = [
 name = "sales-web"
 version = "0.1.0"
 dependencies = [
+ "dotenv",
  "rocket",
+ "sales-impl",
+ "serde",
 ]
 
 [[package]]
