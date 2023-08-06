@@ -1,5 +1,3 @@
-use sqlx::types::Uuid;
-
 use super::purchase::Purchase;
 
 #[derive(Debug)]
@@ -8,11 +6,11 @@ pub struct Customer<'a> {
     pub email: String,
     pub phone: Option<String>,
     pub purchases: Vec<Purchase<'a>>,
-    pub id: Uuid,
+    pub id: i64,
 }
 
 impl<'a> Customer<'a> {
-    pub fn new(name: String, email: String, phone: Option<String>, id: Uuid) -> Customer<'a> {
+    pub fn new(name: String, email: String, phone: Option<String>, id: i64) -> Customer<'a> {
         let purchases = Vec::new();
 
         Customer {

@@ -6,6 +6,6 @@ use super::product::Product;
 
 #[derive(Debug)]
 pub struct Cart {
-    pub id: Uuid,
+    pub id: i64,
     pub products: HashMap<Uuid, Product>,
 }

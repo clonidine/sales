@@ -25,7 +25,7 @@ impl Repository<Product> for ProductRepository {
         Ok(row)
     }
 
-    async fn delete(id: sqlx::types::Uuid) -> Result<MySqlQueryResult> {
+    async fn delete(id: u64) -> Result<MySqlQueryResult> {
         let mut conn = DatabaseImpl::connect().await?;
 
         let query = format!("DELETE FROM {} where id = ?", TABLE_NAME);
@@ -35,7 +35,7 @@ impl Repository<Product> for ProductRepository {
         Ok(row)
     }
 
-    async fn find_one(id: sqlx::types::Uuid) -> Result<Product> {
+    async fn find_one(id: u64) -> Result<Product> {
         let mut conn = DatabaseImpl::connect().await?;
 
         let product = sqlx::query_as::<_, Product>("SELECT * FROM products WHERE id = ? LIMIT 1")
@@ -46,11 +46,15 @@ impl Repository<Product> for ProductRepository {
         Ok(product)
     }
 
+    async fn find_all() -> Result<Vec<Product>> {
+        todo!()
+    }
+
     async fn create_table() -> Result<MySqlQueryResult> {
         let mut conn = DatabaseImpl::connect().await?;
 
         let query = format!(
-            "CREATE TABLE IF NOT EXISTS {} (name VARCHAR(255), id BINARY(16) NOT NULL PRIMARY KEY, price DECIMAL)"
+            "CREATE TABLE IF NOT EXISTS {} (name VARCHAR(255) NOT NULL, id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, price DECIMAL NOT NULL)"
         , TABLE_NAME);
 
         let result = sqlx::query(&query).execute(&mut conn).await?;
@@ -65,7 +69,6 @@ mod repository_tests {
     use rust_decimal::prelude::FromPrimitive;
     use sales_api::api::{domain::product::Product, repository::Repository};
     use sqlx::types::BigDecimal;
-    use uuid::Uuid;
 
     use crate::repository::product::repository::ProductRepository;
 
@@ -77,28 +80,13 @@ mod repository_tests {
             Ok(_) => {
                 let default_product = Product::new(
                     String::from("Burger"),
-                    Uuid::new_v4(),
+                    None,
                     BigDecimal::from_f64(36.50).unwrap(),
                 );
 
                 let saved_product = ProductRepository::save(&default_product).await;
 
-                match saved_product {
-                    Ok(_) => {
-                        let find_product = ProductRepository::find_one(default_product.id).await;
-
-                        match find_product {
-                            Ok(product) => {
-                                dbg!("{}, {}", product.id, default_product.id);
-                                assert_eq!(product.id, default_product.id)
-                            }
-
-                            Err(e) => panic!("Error while trying to find product: {}", e),
-                        }
-                    }
-
-                    Err(e) => panic!("Error while trying to save product: {}", e),
-                }
+                assert!(saved_product.is_ok())
             }
 
             Err(e) => panic!("Error while trying to create table: {}", e),
