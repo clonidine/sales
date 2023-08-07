@@ -15,3 +15,8 @@ pub async fn get_products() -> Result<Value, Status> {
         Err(_) => Err(Status::NotFound),
     }
 }
+
+#[get("/products/<id>")]
+pub async fn get_product(id: u64) -> Result<Value, Status> {
+    todo!()
+}

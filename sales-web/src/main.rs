@@ -23,6 +23,7 @@ fn get_routes() -> Vec<Route> {
     routes![
         pages::index,
         requests::product::get_products,
-        requests::date::current_date
+        requests::date::current_date,
+        requests::product::get_product
     ]
 }
