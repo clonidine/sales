@@ -1,11 +1,28 @@
-mod response;
-mod index;
-mod models;
+use rocket::{Ignite, Rocket, Route};
+
+mod pages;
+mod requests;
 
 #[macro_use]
 extern crate rocket;
 
-#[launch]
-async fn rocket() -> _ {
-    rocket::build().mount("/", routes![index::index, response::hello, response::hey])
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    let routes = get_routes();
+
+    let _rocket = launch(routes).await?;
+
+    Ok(())
+}
+
+async fn launch(routes: Vec<Route>) -> Result<Rocket<Ignite>, rocket::Error> {
+    Ok(rocket::build().mount("/", routes).launch().await?)
+}
+
+fn get_routes() -> Vec<Route> {
+    routes![
+        pages::index,
+        requests::product::get_products,
+        requests::date::current_date
+    ]
 }
