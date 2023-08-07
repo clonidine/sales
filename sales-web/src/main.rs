@@ -22,8 +22,8 @@ async fn launch(routes: Vec<Route>) -> Result<Rocket<Ignite>, rocket::Error> {
 fn get_routes() -> Vec<Route> {
     routes![
         pages::index,
-        requests::product::get_products,
+        requests::product::find_all,
         requests::date::current_date,
-        requests::product::get_product
+        requests::product::find_one
     ]
 }
