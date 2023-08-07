@@ -2775,7 +2775,6 @@ dependencies = [
 name = "sales-web"
 version = "0.1.0"
 dependencies = [
- "bigdecimal 0.4.1",
  "chrono",
  "dotenv",
  "rocket 0.5.0-rc.3",
