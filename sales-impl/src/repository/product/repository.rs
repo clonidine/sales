@@ -1,5 +1,9 @@
 use async_trait::async_trait;
-use sales_api::api::{domain::product::Product, provider::Database, repository::Repository};
+use sales_api::api::{
+    domain::product::{Product, ProductWrapper},
+    provider::Database,
+    repository::Repository,
+};
 use sqlx::{mysql::MySqlQueryResult, Result};
 
 use crate::db::db::DatabaseImpl;
@@ -15,14 +19,18 @@ impl Repository<Product> for ProductRepository {
 
         let query = format!("INSERT INTO {} VALUES (?, ?, ?)", TABLE_NAME);
 
-        let row = sqlx::query(&query)
-            .bind(&obj.name)
-            .bind(&obj.id)
-            .bind(&obj.price)
-            .execute(&mut conn)
-            .await?;
+        let obj = ProductWrapper::wrap(&obj);
 
-        Ok(row)
+        match obj {
+            Ok(obj) => Ok(sqlx::query(&query)
+                .bind(&obj.name)
+                .bind(&obj.id)
+                .bind(&obj.price)
+                .execute(&mut conn)
+                .await?),
+
+            Err(e) => panic!("{}", e),
+        }
     }
 
     async fn delete(id: u64) -> Result<MySqlQueryResult> {
@@ -38,16 +46,38 @@ impl Repository<Product> for ProductRepository {
     async fn find_one(id: u64) -> Result<Product> {
         let mut conn = DatabaseImpl::connect().await?;
 
-        let product = sqlx::query_as::<_, Product>("SELECT * FROM products WHERE id = ? LIMIT 1")
+        let query = format!("SELECT * FROM {} where id = ? LIMIT 1", TABLE_NAME);
+
+        let wrapper = sqlx::query_as::<_, ProductWrapper>(&query)
             .bind(id)
             .fetch_one(&mut conn)
             .await?;
 
-        Ok(product)
+        let product = Product::parse(&wrapper);
+
+        match product {
+            Ok(product) => Ok(product),
+            Err(e) => panic!("{}", e),
+        }
     }
 
     async fn find_all() -> Result<Vec<Product>> {
-        todo!()
+        let mut conn = DatabaseImpl::connect().await?;
+
+        let query = format!("SELECT * FROM {}", TABLE_NAME);
+
+        let products: Vec<ProductWrapper> = sqlx::query_as::<_, ProductWrapper>(&query)
+            .fetch_all(&mut conn)
+            .await?;
+
+        let products = products
+            .iter()
+            .map(|wrapper| Product::parse(wrapper))
+            .collect::<Result<Vec<Product>, _>>()
+            .ok()
+            .unwrap_or_else(Vec::new);
+
+        Ok(products)
     }
 
     async fn create_table() -> Result<MySqlQueryResult> {
@@ -66,14 +96,13 @@ impl Repository<Product> for ProductRepository {
 #[cfg(test)]
 mod repository_tests {
 
-    use rust_decimal::prelude::FromPrimitive;
+    use rust_decimal::{prelude::FromPrimitive, Decimal};
     use sales_api::api::{domain::product::Product, repository::Repository};
-    use sqlx::types::BigDecimal;
 
     use crate::repository::product::repository::ProductRepository;
 
     #[tokio::test]
-    async fn saving_and_finding_product() {
+    async fn inserting_product() {
         let created_table = ProductRepository::create_table().await;
 
         match created_table {
@@ -81,7 +110,7 @@ mod repository_tests {
                 let default_product = Product::new(
                     String::from("Burger"),
                     None,
-                    BigDecimal::from_f64(36.50).unwrap(),
+                    Decimal::from_f64(36.5).unwrap(),
                 );
 
                 let saved_product = ProductRepository::save(&default_product).await;
