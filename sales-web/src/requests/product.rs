@@ -18,5 +18,10 @@ pub async fn get_products() -> Result<Value, Status> {
 
 #[get("/products/<id>")]
 pub async fn get_product(id: u64) -> Result<Value, Status> {
-    todo!()
+    let product = ProductRepository::find_one(id).await;
+
+    match product {
+        Ok(product) => Ok(json!(product)),
+        Err(_) => Err(Status::NotFound),
+    }
 }
