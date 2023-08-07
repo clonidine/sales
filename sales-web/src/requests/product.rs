@@ -6,7 +6,7 @@ use sales_api::api::repository::Repository;
 use sales_impl::repository::product::repository::ProductRepository;
 
 #[get("/products")]
-pub async fn get_products() -> Result<Value, Status> {
+pub async fn find_all() -> Result<Value, Status> {
     let products = ProductRepository::find_all().await;
 
     match products {
@@ -17,7 +17,7 @@ pub async fn get_products() -> Result<Value, Status> {
 }
 
 #[get("/products/<id>")]
-pub async fn get_product(id: u64) -> Result<Value, Status> {
+pub async fn find_one(id: u64) -> Result<Value, Status> {
     let product = ProductRepository::find_one(id).await;
 
     match product {
