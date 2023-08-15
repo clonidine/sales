@@ -1,0 +1,13 @@
+[package]
+name = "mapper"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+domain = {path = "../domain"}
+dto = {path = "../dto"}
+
+sqlx-core = "0.7.1"
+bigdecimal = "0.4.1"

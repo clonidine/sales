@@ -1,7 +1,11 @@
 [workspace]
+resolver = "2"
 
 members = [
-    "sales-api",
-    "sales-impl",
-    "sales-web",
+    "domain",
+    "repository",
+    "db",
+    "dto",
+    "mapper",
+    "resources",
 ]

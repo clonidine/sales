@@ -1,0 +1,18 @@
+[package]
+name = "repository"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = "0.1.73"
+sqlx = {version = "0.7.1", features = ["bigdecimal"]}
+async-core = "0.3.1"
+tokio = {version = "1.29.1", features = ["rt", "macros", "rt-multi-thread"]}
+
+domain = {path = "../domain"}
+dto = {path = "../dto"}
+mapper = {path = "../mapper"}
+db = {path = "../db"}
+bigdecimal = "0.4.1"
