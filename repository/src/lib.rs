@@ -14,7 +14,7 @@ pub trait ProductRepositoryAbstract {
     async fn update(
         column_filter_name: &str,
         column_to_update: &str,
-        filter: &str,
-        new_value: &str,
+        filter_value: &str,
+        updated_value: &str,
     ) -> Result<(), String>;
 }

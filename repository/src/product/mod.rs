@@ -135,8 +135,8 @@ impl ProductRepositoryAbstract for ProductRepositoryMySQL {
     async fn update(
         column_filter_name: &str,
         column_to_update: &str,
-        filter: &str,
-        new_value: &str,
+        filter_value: &str,
+        updated_value: &str,
     ) -> Result<(), String> {
         let mut conn = DbMySql::connect().await?;
 
@@ -146,8 +146,8 @@ impl ProductRepositoryAbstract for ProductRepositoryMySQL {
         );
 
         let query_result = sqlx::query(&query)
-            .bind(new_value)
-            .bind(filter)
+            .bind(updated_value)
+            .bind(filter_value)
             .execute(&mut conn)
             .await;
 
@@ -192,12 +192,12 @@ mod repo_tests {
     #[tokio::test]
     async fn updating_stock() {
         let column_filter_name = "id";
-        let filter = "1";
-        let new_value = "234";
+        let filter_value = "1";
+        let updated_value = "234";
         let column_to_update = "stock";
 
         let updated =
-            ProductRepositoryMySQL::update(column_filter_name, column_to_update, filter, new_value)
+            ProductRepositoryMySQL::update(column_filter_name, column_to_update, filter_value, updated_value)
                 .await;
 
         assert!(updated.is_ok())

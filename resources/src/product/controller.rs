@@ -53,11 +53,11 @@ pub async fn update_stock(id: u64, stock_update: Json<StockUpdate>) -> Result<Va
     let column_filter = "id";
     let column_update = "stock";
 
-    let filter = id.to_string();
+    let filter_value = id.to_string();
     let value = stock_update.stock.to_string();
 
     let updated =
-        ProductRepositoryMySQL::update(column_filter, column_update, &filter, &value).await;
+        ProductRepositoryMySQL::update(column_filter, column_update, &filter_value, &value).await;
 
     match updated {
         Ok(_) => {
