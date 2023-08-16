@@ -1,5 +1,6 @@
-pub mod controllers;
+pub mod date;
 pub mod pages;
+pub mod product;
 
 use rocket::{routes, Error, Ignite, Rocket, Route};
 
@@ -19,10 +20,10 @@ async fn launch(routes: Vec<Route>) -> Result<Rocket<Ignite>, rocket::Error> {
 fn get_routes() -> Vec<Route> {
     routes![
         pages::index,
-        controllers::product::find_one,
-        controllers::product::find_all,
-        controllers::date::current_date,
-        controllers::product::save,
-        controllers::product::delete
+        date::controller::current_date,
+        product::controller::find_one,
+        product::controller::find_all,
+        product::controller::update_stock,
+        product::controller::delete
     ]
 }
