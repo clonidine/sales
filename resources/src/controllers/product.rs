@@ -27,8 +27,6 @@ pub async fn find_one(id: u64) -> Result<Value, Status> {
 
 #[rocket::post("/api/products", format = "json", data = "<product>")]
 pub async fn save(product: Json<Product>) -> Status {
-    let product = Product::new(&product.name, product.price.clone(), product.id);
-
     let product_saved = ProductRepositoryMySQL::save(&product).await;
 
     match product_saved {
