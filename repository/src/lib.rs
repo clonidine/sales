@@ -11,4 +11,10 @@ pub trait ProductRepositoryAbstract {
     async fn save(product: &Product) -> Result<bool, String>;
     async fn delete(id: u64) -> Result<bool, String>;
     async fn create_table() -> Result<(), String>;
+    async fn update(
+        column_filter_name: &str,
+        column_to_update: &str,
+        filter: &str,
+        new_value: &str,
+    ) -> Result<(), String>;
 }

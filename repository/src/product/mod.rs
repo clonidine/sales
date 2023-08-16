@@ -73,11 +73,12 @@ impl ProductRepositoryAbstract for ProductRepositoryMySQL {
 
         match dto {
             Ok(dto) => {
-                let query = format!("INSERT INTO {} VALUES (?, ?, ?)", TABLE_NAME);
+                let query = format!("INSERT INTO {} VALUES (?, ?, ?, ?)", TABLE_NAME);
 
                 let query_result = sqlx::query(&query)
                     .bind(&dto.name)
                     .bind(&dto.id)
+                    .bind(&dto.stock)
                     .bind(&dto.price)
                     .execute(&mut conn)
                     .await;
@@ -120,12 +121,40 @@ impl ProductRepositoryAbstract for ProductRepositoryMySQL {
 
         let query = format!("
         CREATE TABLE IF NOT EXISTS {} 
-        (name VARCHAR(255) NOT NULL, id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, price DECIMAL NOT NULL)
+        (name VARCHAR(255) NOT NULL, id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, stock BIGINT UNSIGNED, price DECIMAL NOT NULL)
         ", TABLE_NAME);
 
-        let _ = sqlx::query(&query).execute(&mut conn).await;
+        let query_result = sqlx::query(&query).execute(&mut conn).await;
 
-        Ok(())
+        match query_result {
+            Ok(_) => Ok(()),
+            Err(e) => panic!("{}", e),
+        }
+    }
+
+    async fn update(
+        column_filter_name: &str,
+        column_to_update: &str,
+        filter: &str,
+        new_value: &str,
+    ) -> Result<(), String> {
+        let mut conn = DbMySql::connect().await?;
+
+        let query = format!(
+            "UPDATE {} SET {} = ? WHERE {} = ?",
+            TABLE_NAME, column_to_update, column_filter_name
+        );
+
+        let query_result = sqlx::query(&query)
+            .bind(new_value)
+            .bind(filter)
+            .execute(&mut conn)
+            .await;
+
+        match query_result {
+            Ok(_) => Ok(()),
+            Err(e) => Err(format!("{}", e)),
+        }
     }
 }
 
@@ -144,8 +173,12 @@ mod repo_tests {
 
         match created_table {
             Ok(_) => {
-                let product =
-                    Product::new("Macarronada", BigDecimal::from_str("34").unwrap(), None);
+                let product = Product::new(
+                    "Macarronada",
+                    BigDecimal::from_str("34").unwrap(),
+                    Some(1),
+                    None,
+                );
 
                 let product_saved = ProductRepositoryMySQL::save(&product).await;
 
@@ -154,5 +187,19 @@ mod repo_tests {
 
             Err(e) => panic!("{}", e),
         }
+    }
+
+    #[tokio::test]
+    async fn updating_stock() {
+        let column_filter_name = "id";
+        let filter = "1";
+        let new_value = "234";
+        let column_to_update = "stock";
+
+        let updated =
+            ProductRepositoryMySQL::update(column_filter_name, column_to_update, filter, new_value)
+                .await;
+
+        assert!(updated.is_ok())
     }
 }

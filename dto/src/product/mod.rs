@@ -4,14 +4,16 @@ use sqlx::types::BigDecimal;
 pub struct ProductDTO {
     pub name: String,
     pub price: BigDecimal,
+    pub stock: Option<u64>,
     pub id: Option<u64>,
 }
 
 impl ProductDTO {
-    pub fn new(name: &str, price: BigDecimal, id: Option<u64>) -> ProductDTO {
+    pub fn new(name: &str, price: BigDecimal, stock: Option<u64>, id: Option<u64>) -> ProductDTO {
         ProductDTO {
             name: name.to_string(),
             price,
+            stock,
             id,
         }
     }

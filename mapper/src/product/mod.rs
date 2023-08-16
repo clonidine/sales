@@ -13,7 +13,12 @@ impl ProductMapper {
 
         match price {
             Ok(price) => {
-                let product = Product::new(&product_dto.name, price, product_dto.id);
+                let product = Product::new(
+                    &product_dto.name,
+                    price,
+                    product_dto.stock,
+                    product_dto.id,
+                );
 
                 Ok(product)
             }
@@ -27,7 +32,7 @@ impl ProductMapper {
 
         match price {
             Ok(price) => {
-                let product_dto = ProductDTO::new(&product.name, price, product.id);
+                let product_dto = ProductDTO::new(&product.name, price, product.stock, product.id);
 
                 Ok(product_dto)
             }
